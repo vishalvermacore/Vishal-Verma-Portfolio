@@ -99,8 +99,8 @@ export const Hero = () => {
                 </Button>
               </a>
               <a
-                href="/resume/VishalVerma_Resume.pdf"
-                download="VishalVerma_Resume.pdf"
+                href="/resume/vishal_verma_resume.pdf"
+                download="vishal_verma_resume.pdf"
                 className="inline-block"
               >
                 <AnimatedBorderButton>
