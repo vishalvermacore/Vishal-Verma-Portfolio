@@ -99,8 +99,8 @@ export const Hero = () => {
                 </Button>
               </a>
               <a
-                href="/resume/vishal_verma_resume.pdf"
-                download="vishal_verma_resume.pdf"
+                href="/resume/VishalVermaResume.pdf"
+                download="vishalVermaResume.pdf"
                 className="inline-block"
               >
                 <AnimatedBorderButton>
@@ -144,7 +144,7 @@ export const Hero = () => {
               />
               <div className="relative glass rounded-3xl p-2 glow-border">
                 <img
-                  src="/profile-photo.jpg"
+                  src="/profile-photo.jpeg"
                   alt="Vishal Verma"
                   className="w-full aspect-[4/5] object-cover rounded-2xl"
                 />
