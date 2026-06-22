@@ -5,20 +5,23 @@ import { Education } from "@/sections/Education";
 import { Contact } from "@/sections/Contact";
 import { Navbar } from "@/layout/Navbar";
 import { Footer } from "./layout/Footer";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 function App() {
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Projects />
-        <Education />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen overflow-x-hidden">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Projects />
+          <Education />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
 

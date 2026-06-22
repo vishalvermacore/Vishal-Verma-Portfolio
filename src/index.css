@@ -21,6 +21,22 @@
 
   --color-highlight: #f5a623;
   --color-surface: #1a2329;
+  --nav-bg: color-mix(in srgb, var(--color-background) 80%, transparent);
+}
+
+[data-theme="light"] {
+  --color-background: #f9f8f6;
+  --color-background-secondary: #eeecea;
+  --color-background-tertiary: #e4e2de;
+  --color-foreground: #0f1418;
+  --color-muted-foreground: #52525b;
+  --color-primary: #0d9488;
+  --color-primary-dark: #0a7a70;
+  --color-primary-light: #14b8a6;
+  --color-border: #d4d2ce;
+  --color-border-primary: rgba(13, 148, 136, 0.25);
+  --color-card: #ffffff;
+  --color-card-hover: #f5f4f2;
 }
 
 @layer base {
@@ -36,6 +52,9 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: "Inter", sans-serif;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   h1,
@@ -46,7 +65,6 @@
   h6 {
     font-family: "Space Grotesk", sans-serif;
   }
-
   .font-serif {
     font-family: "Playfair Display", serif;
   }
