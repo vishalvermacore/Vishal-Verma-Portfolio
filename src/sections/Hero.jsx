@@ -29,6 +29,40 @@ const skills = [
   "Collaboration",
 ];
 
+// Fixed dot positions — computed once, not on every render
+const DOTS = [
+  { left: "5%", top: "12%", dur: 18, delay: 0 },
+  { left: "12%", top: "45%", dur: 22, delay: 1.2 },
+  { left: "18%", top: "78%", dur: 16, delay: 0.5 },
+  { left: "25%", top: "23%", dur: 25, delay: 2.1 },
+  { left: "32%", top: "67%", dur: 19, delay: 0.8 },
+  { left: "38%", top: "8%", dur: 21, delay: 3.0 },
+  { left: "44%", top: "89%", dur: 17, delay: 1.5 },
+  { left: "50%", top: "34%", dur: 23, delay: 0.3 },
+  { left: "55%", top: "56%", dur: 20, delay: 2.5 },
+  { left: "61%", top: "15%", dur: 26, delay: 1.0 },
+  { left: "67%", top: "72%", dur: 18, delay: 0.7 },
+  { left: "73%", top: "40%", dur: 22, delay: 3.5 },
+  { left: "79%", top: "91%", dur: 15, delay: 1.8 },
+  { left: "85%", top: "28%", dur: 24, delay: 0.4 },
+  { left: "91%", top: "63%", dur: 20, delay: 2.2 },
+  { left: "8%", top: "55%", dur: 17, delay: 4.0 },
+  { left: "15%", top: "88%", dur: 21, delay: 0.9 },
+  { left: "22%", top: "33%", dur: 19, delay: 2.8 },
+  { left: "29%", top: "71%", dur: 23, delay: 1.3 },
+  { left: "36%", top: "18%", dur: 16, delay: 3.2 },
+  { left: "43%", top: "50%", dur: 25, delay: 0.6 },
+  { left: "49%", top: "82%", dur: 18, delay: 1.9 },
+  { left: "57%", top: "25%", dur: 22, delay: 4.5 },
+  { left: "64%", top: "47%", dur: 20, delay: 0.2 },
+  { left: "70%", top: "84%", dur: 24, delay: 2.7 },
+  { left: "76%", top: "10%", dur: 17, delay: 1.1 },
+  { left: "83%", top: "59%", dur: 21, delay: 3.8 },
+  { left: "89%", top: "36%", dur: 19, delay: 0.8 },
+  { left: "95%", top: "76%", dur: 23, delay: 2.0 },
+  { left: "3%", top: "95%", dur: 26, delay: 1.6 },
+];
+
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -39,22 +73,22 @@ export const Hero = () => {
           alt="Hero image"
           className="w-full h-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/20 via-background/80 to-background" />
       </div>
 
       {/* Green Dots */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => (
+        {DOTS.map((dot, i) => (
           <div
+            key={i}
+            aria-hidden="true"
             className="absolute w-1.5 h-1.5 rounded-full opacity-60"
             style={{
               backgroundColor: "#20B2A6",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `slow-drift ${
-                15 + Math.random() * 20
-              }s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
+              left: dot.left,
+              top: dot.top,
+              animation: `slow-drift ${dot.dur}s ease-in-out infinite`,
+              animationDelay: `${dot.delay}s`,
             }}
           />
         ))}
@@ -99,8 +133,8 @@ export const Hero = () => {
                 </Button>
               </a>
               <a
-                href="/resume/vishalvermaresume.pdf"
-                download="vishalvermaresume.pdf"
+                href="/resume/VishalVermaResume.pdf"
+                download="VishalVermaResume.pdf"
                 className="inline-block"
               >
                 <AnimatedBorderButton>
@@ -133,12 +167,12 @@ export const Hero = () => {
             </div>
           </div>
           {/* Right Column - Profile Image */}
-          <div className="relatice animate-fade-in animation-delay-300">
+          <div className="relative animate-fade-in animation-delay-300">
             {/* Profile Image */}
             <div className="relative max-w-md mx-auto">
               <div
                 className="absolute inset-0 
-              rounded-3xl bg-gradient-to-br 
+              rounded-3xl bg-linear-to-br 
               from-primary/30 via-transparent 
               to-primary/10 blur-2xl animate-pulse"
               />
@@ -146,7 +180,7 @@ export const Hero = () => {
                 <img
                   src="/profile-photo.jpg"
                   alt="Vishal Verma"
-                  className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  className="w-full aspect-4/5 object-cover rounded-2xl"
                 />
 
                 {/* Floating Badge */}
@@ -180,15 +214,15 @@ export const Hero = () => {
           <div className="relative overflow-hidden">
             <div
               className="absolute left-0 top-0 bottom-0 w-32
-             bg-gradient-to-r from-background to-transparent z-10"
+             bg-linear-to-r from-background to-transparent z-10"
             />
             <div
               className="absolute right-0 top-0 bottom-0 w-32
-             bg-gradient-to-l from-background to-transparent z-10"
+             bg-linear-to-l from-background to-transparent z-10"
             />
             <div className="flex animate-marquee">
               {[...skills, ...skills].map((skill, idx) => (
-                <div key={idx} className="flex-shrink-0 px-8 py-4">
+                <div key={idx} className="shrink-0 px-8 py-4">
                   <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
                     {skill}
                   </span>
