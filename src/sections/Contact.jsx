@@ -1,6 +1,7 @@
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { Mail, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/Button";
-import { useState } from "react";
 import emailjs from "@emailjs/browser";
 
 const contactInfo = [
@@ -19,32 +20,27 @@ const contactInfo = [
 ];
 
 export const Contact = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-
   const [isLoading, setIsLoading] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState({
-    type: null,
-    message: "",
-  });
+  const [submitStatus, setSubmitStatus] = useState({ type: null, message: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setSubmitStatus({ type: null, message: "" });
-
     try {
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
       const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-      if (!serviceId || !templateId || !publicKey) {
+      if (!serviceId || !templateId || !publicKey)
         throw new Error("EmailJS environment variables are missing");
-      }
-
       await emailjs.send(
         serviceId,
         templateId,
@@ -53,69 +49,159 @@ export const Contact = () => {
           email: formData.email,
           message: formData.message,
         },
-        publicKey
+        publicKey,
       );
-
       setSubmitStatus({
         type: "success",
-        message: "Message sent successfully! I’ll get back to you soon.",
+        message: "Message sent! I'll get back to you soon.",
       });
-
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
       console.error("EmailJS error:", err);
       setSubmitStatus({
         type: "error",
-        message: "Failed to send message. Please try again later.",
+        message: "Failed to send. Please try again later.",
       });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const inputStyle = {
+    width: "100%",
+    padding: "12px 16px",
+    borderRadius: "12px",
+    border: "1px solid var(--color-border)",
+    background: "var(--color-card, #141a1f)",
+    color: "var(--color-foreground)",
+    fontFamily: "Inter, sans-serif",
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 0.2s",
+    boxSizing: "border-box",
+  };
+
   return (
     <section
       id="contact"
-      className="py-32 relative overflow-hidden overflow-x-hidden"
+      ref={ref}
+      style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}
     >
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-highlight/5 rounded-full blur-3xl" />
-      </div>
+      {/* bg glows */}
+      <div
+        style={{
+          position: "absolute",
+          top: "20%",
+          left: "15%",
+          width: "480px",
+          height: "480px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(32,178,166,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55 }}
+          style={{ textAlign: "center", marginBottom: "72px" }}
+        >
+          <span
+            style={{
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
             Get In Touch
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 text-secondary-foreground">
+          <h2
+            style={{
+              fontFamily: "Space Grotesk, sans-serif",
+              fontSize: "clamp(30px, 4vw, 46px)",
+              fontWeight: 700,
+              letterSpacing: "-1.5px",
+              lineHeight: 1.15,
+              color: "var(--color-foreground)",
+              marginTop: "12px",
+            }}
+          >
             Let's build{" "}
-            <span className="font-serif italic font-normal text-white">
+            <span
+              style={{
+                fontFamily: "Playfair Display, serif",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "var(--color-primary)",
+              }}
+            >
               something great.
             </span>
           </h2>
-          <p className="text-muted-foreground">
-            Have a project in mind? Send me a message and let’s talk.
+          <p
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "15px",
+              color: "var(--color-muted-foreground)",
+              marginTop: "16px",
+              lineHeight: 1.7,
+            }}
+          >
+            Have a project in mind or want to collaborate? Send me a message.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+        {/* Two columns */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "32px",
+            maxWidth: "900px",
+            margin: "0 auto",
+          }}
+        >
           {/* Form */}
-          <div className="glass p-6 sm:p-8 rounded-3xl border border-primary/30 w-full">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Name */}
+          <motion.div
+            initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
+            animate={inView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+            transition={{
+              duration: 0.65,
+              delay: 0.1,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{
+              padding: "32px",
+              borderRadius: "20px",
+              background: "var(--color-card, #141a1f)",
+              border: "1px solid rgba(32,178,166,0.2)",
+            }}
+          >
+            <form
+              onSubmit={handleSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
               <div>
                 <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-2"
+                  style={{
+                    display: "block",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    fontFamily: "Inter, sans-serif",
+                    color: "var(--color-foreground)",
+                    marginBottom: "8px",
+                  }}
                 >
                   Name
                 </label>
                 <input
-                  id="name"
-                  name="name"
                   type="text"
                   required
                   value={formData.name}
@@ -123,21 +209,30 @@ export const Contact = () => {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   placeholder="Your name"
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  style={inputStyle}
+                  onFocus={(e) =>
+                    (e.target.style.borderColor = "var(--color-primary)")
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = "var(--color-border)")
+                  }
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-2"
+                  style={{
+                    display: "block",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    fontFamily: "Inter, sans-serif",
+                    color: "var(--color-foreground)",
+                    marginBottom: "8px",
+                  }}
                 >
                   Email
                 </label>
                 <input
-                  id="email"
-                  name="email"
                   type="email"
                   required
                   value={formData.email}
@@ -145,108 +240,253 @@ export const Contact = () => {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  style={inputStyle}
+                  onFocus={(e) =>
+                    (e.target.style.borderColor = "var(--color-primary)")
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = "var(--color-border)")
+                  }
                 />
               </div>
 
-              {/* Message */}
               <div>
                 <label
-                  htmlFor="message"
-                  className="block text-sm font-medium mb-2"
+                  style={{
+                    display: "block",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    fontFamily: "Inter, sans-serif",
+                    color: "var(--color-foreground)",
+                    marginBottom: "8px",
+                  }}
                 >
                   Message
                 </label>
                 <textarea
-                  id="message"
-                  name="message"
                   rows={5}
                   required
                   value={formData.message}
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  placeholder="Your message"
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none"
+                  placeholder="Your message..."
+                  style={{ ...inputStyle, resize: "none" }}
+                  onFocus={(e) =>
+                    (e.target.style.borderColor = "var(--color-primary)")
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = "var(--color-border)")
+                  }
                 />
               </div>
 
-              {/* Submit */}
-              <Button className="w-full" size="lg" disabled={isLoading}>
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+                className="w-full"
+              >
                 {isLoading ? (
                   "Sending..."
                 ) : (
                   <>
-                    Send Message
-                    <Send className="w-5 h-5 block" strokeWidth={1.75} />
+                    <Send size={17} /> Send Message
                   </>
                 )}
               </Button>
 
-              {/* Status */}
               {submitStatus.type && (
                 <div
-                  className={`flex items-center gap-3 p-4 rounded-xl ${
-                    submitStatus.type === "success"
-                      ? "bg-green-500/10 border border-green-500/20 text-green-400"
-                      : "bg-red-500/10 border border-red-500/20 text-red-400"
-                  }`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "14px 16px",
+                    borderRadius: "12px",
+                    background:
+                      submitStatus.type === "success"
+                        ? "rgba(34,197,94,0.08)"
+                        : "rgba(239,68,68,0.08)",
+                    border: `1px solid ${
+                      submitStatus.type === "success"
+                        ? "rgba(34,197,94,0.25)"
+                        : "rgba(239,68,68,0.25)"
+                    }`,
+                  }}
                 >
                   {submitStatus.type === "success" ? (
-                    <CheckCircle className="w-5 h-5 shrink-0 block" />
+                    <CheckCircle size={18} color="#22c55e" />
                   ) : (
-                    <AlertCircle className="w-5 h-5 shrink-0 block" />
+                    <AlertCircle size={18} color="#ef4444" />
                   )}
-                  <p className="text-sm">{submitStatus.message}</p>
+                  <p
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: "13px",
+                      color:
+                        submitStatus.type === "success" ? "#22c55e" : "#ef4444",
+                    }}
+                  >
+                    {submitStatus.message}
+                  </p>
                 </div>
               )}
             </form>
-          </div>
+          </motion.div>
 
-          {/* Contact Info */}
-          <div className="space-y-6">
-            <div className="glass rounded-3xl p-6 sm:p-8">
-              <h3 className="text-xl font-semibold mb-6">
+          {/* Right info */}
+          <motion.div
+            initial={{ opacity: 0, x: 30, filter: "blur(6px)" }}
+            animate={inView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+            transition={{
+              duration: 0.65,
+              delay: 0.2,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+          >
+            {/* Contact info card */}
+            <div
+              style={{
+                padding: "28px",
+                borderRadius: "20px",
+                background: "var(--color-card, #141a1f)",
+                border: "1px solid var(--color-border)",
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "Space Grotesk, sans-serif",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "var(--color-foreground)",
+                  marginBottom: "20px",
+                }}
+              >
                 Contact Information
               </h3>
-              <div className="space-y-4">
-                {contactInfo.map((item, i) => (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                {contactInfo.map((item) => (
                   <a
-                    key={i}
+                    key={item.label}
                     href={item.href}
-                    className="flex items-center gap-4 p-4 rounded-xl hover:bg-surface transition-colors"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "14px",
+                      padding: "12px 14px",
+                      borderRadius: "12px",
+                      textDecoration: "none",
+                      transition: "background 0.2s",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background =
+                        "rgba(32,178,166,0.06)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background = "transparent")
+                    }
                   >
-                    <div className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <item.icon
-                        className="w-5 h-5 block text-primary"
-                        strokeWidth={1.75}
-                        aria-hidden="true"
-                      />
+                    <div
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        borderRadius: "11px",
+                        background: "rgba(32,178,166,0.1)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <item.icon size={18} color="var(--color-primary)" />
                     </div>
                     <div>
-                      <div className="text-sm text-muted-foreground">
+                      <div
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "11px",
+                          color: "var(--color-muted-foreground)",
+                          marginBottom: "2px",
+                        }}
+                      >
                         {item.label}
                       </div>
-                      <div className="font-medium">{item.value}</div>
+                      <div
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          color: "var(--color-foreground)",
+                        }}
+                      >
+                        {item.value}
+                      </div>
                     </div>
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Availability */}
-            <div className="glass p-6 sm:p-8 rounded-3xl border border-primary/30 w-full">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                <span className="font-medium">Currently Available</span>
+            {/* Availability card */}
+            <div
+              style={{
+                padding: "28px",
+                borderRadius: "20px",
+                background: "rgba(32,178,166,0.06)",
+                border: "1px solid rgba(32,178,166,0.2)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginBottom: "12px",
+                }}
+              >
+                <span
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    backgroundColor: "#22c55e",
+                    display: "inline-block",
+                    animation: "pulse 2s infinite",
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "Space Grotesk, sans-serif",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    color: "var(--color-foreground)",
+                  }}
+                >
+                  Currently Available
+                </span>
               </div>
-              <p className="text-muted-foreground text-sm">
-                I am currently open to new opportunities and exciting projects
-                as a Full Stack Developer. I would be glad to connect and
-                discuss how I can contribute to your team. let's talk!
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "13px",
+                  lineHeight: 1.7,
+                  color: "var(--color-muted-foreground)",
+                }}
+              >
+                Open to Data Science & ML Engineer roles, internships, and
+                freelance data projects. Let's connect and explore how I can
+                contribute to your team.
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

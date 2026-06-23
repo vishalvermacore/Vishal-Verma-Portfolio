@@ -1,139 +1,510 @@
-import { ArrowUpRight, Github } from "lucide-react";
-import { AnimatedBorderButton } from "@/components/AnimatedBorderButton";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
+
 const projects = [
   {
-    title: "EchoStream -Real-Time Video Calling & Chat Platform",
+    title: "EchoStream",
+    subtitle: "Real-Time Video Calling & Chat Platform",
     description:
-      "A global language exchange platform using the MERN stack, focused on seamless user interaction and cross-cultural communication.",
+      "A global language exchange platform using the MERN stack with WebRTC for peer-to-peer video calling, Socket.io for real-time messaging, and Stream API for scalable chat infrastructure.",
     image: "/projects/project1.png",
-    tags: ["React", "Tailwind CSS", "NodeJS", "ExpressJS", "MongoDB"],
-    link: "https://echostream-video-calling-realtime-chat.onrender.com",
+    tags: ["React", "Node.js", "Socket.io", "WebRTC", "MongoDB", "ExpressJS"],
+    metrics: ["Real-time < 200ms", "Multi-room Support", "Live Chat"],
+    demo: "https://echostream-video-calling-realtime-chat.onrender.com",
     github:
       "https://github.com/vishalvermacore/EchoStream-Video-Calling-Realtime-Chat-Social-App",
   },
   {
-    title: "Tredzo – Zerodha-Style Stock Trading Web Application",
+    title: "Tredzo",
+    subtitle: "Zerodha-Style Stock Trading Application",
     description:
-      "A MERN stack stock trading web application inspired by Zerodha, featuring a realistic interface with interactive modules for watchlists, order execution, and portfolio analytics.",
+      "A full-stack stock trading web app inspired by Zerodha. Features interactive watchlists, order execution simulation, portfolio analytics with Chart.js, and a realistic trading dashboard.",
     image: "/projects/project2.jpeg",
-    tags: [
-      "React.js",
-      "Material UI",
-      "Bootstrap",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "Chart.js",
-      "Jest",
-    ],
-    link: "https://github.com/vishalvermacore/Stock-Trade-Application",
+    tags: ["React.js", "Node.js", "MongoDB", "Chart.js", "Material UI", "Jest"],
+    metrics: ["Portfolio Analytics", "Order Execution", "Interactive Charts"],
+    demo: null,
     github: "https://github.com/vishalvermacore/Stock-Trade-Application",
+  },
+  {
+    title: "Coming Soon",
+    subtitle: "Next DS/ML Project",
+    description:
+      "Currently building an end-to-end machine learning project involving data collection, model training, and a production-ready API. Stay tuned.",
+    image: null,
+    tags: ["Python", "TensorFlow", "FastAPI", "Docker"],
+    metrics: ["In Progress", "ML Pipeline", "REST API"],
+    demo: null,
+    github: null,
+    comingSoon: true,
   },
 ];
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.15 } },
+};
+
+const cardVariant = {
+  hidden: { opacity: 0, y: 36, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export const Projects = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
   return (
-    <section id="projects" className="py-32 relative overflow-hidden">
-      {/* Bg glows */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-highlight/5 rounded-full blur-3xl" />
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mx-auto max-w-3xl mb-16">
-          <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in">
+    <section
+      id="projects"
+      ref={ref}
+      style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}
+    >
+      {/* bg glows */}
+      <div
+        style={{
+          position: "absolute",
+          top: "20%",
+          right: "-5%",
+          width: "500px",
+          height: "500px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(32,178,166,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: "20%",
+          left: "-5%",
+          width: "400px",
+          height: "400px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(245,166,35,0.04) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55 }}
+          style={{ textAlign: "center", marginBottom: "72px" }}
+        >
+          <span
+            style={{
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
             Featured Work
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 animate-fade-in animation-delay-100 text-secondary-foreground">
-            Projects that
-            <span className="font-serif italic font-normal text-white">
-              {" "}
+          <h2
+            style={{
+              fontFamily: "Space Grotesk, sans-serif",
+              fontSize: "clamp(30px, 4vw, 46px)",
+              fontWeight: 700,
+              letterSpacing: "-1.5px",
+              lineHeight: 1.15,
+              color: "var(--color-foreground)",
+              marginTop: "12px",
+            }}
+          >
+            Projects that{" "}
+            <span
+              style={{
+                fontFamily: "Playfair Display, serif",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "var(--color-primary)",
+              }}
+            >
               make an impact.
             </span>
           </h2>
-          <p className="text-muted-foreground animate-fade-in animation-delay-200">
-            A selection of my recent work, from complex web applications to
-            innovative tools that solve real-world problems.
+          <p
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "15px",
+              color: "var(--color-muted-foreground)",
+              marginTop: "16px",
+              maxWidth: "480px",
+              margin: "16px auto 0",
+              lineHeight: 1.7,
+            }}
+          >
+            Real-world applications built with modern tech — from real-time
+            platforms to data-driven dashboards.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, idx) => (
-            <div
-              key={idx}
-              className="group glass rounded-2xl overflow-hidden animate-fade-in md:row-span-1"
-              style={{ animationDelay: `${(idx + 1) * 100}ms` }}
+        {/* Cards grid */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={inView ? "show" : "hidden"}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "24px",
+          }}
+        >
+          {projects.map((project) => (
+            <motion.div
+              key={project.title}
+              variants={cardVariant}
+              whileHover={
+                !project.comingSoon
+                  ? { y: -6, transition: { duration: 0.22 } }
+                  : {}
+              }
+              style={{
+                borderRadius: "20px",
+                background: "var(--color-card, #141a1f)",
+                border: `1px solid ${project.comingSoon ? "var(--color-border)" : "var(--color-border)"}`,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                transition: "border-color 0.25s, box-shadow 0.25s",
+                opacity: project.comingSoon ? 0.65 : 1,
+              }}
+              onMouseEnter={(e) => {
+                if (!project.comingSoon) {
+                  e.currentTarget.style.borderColor = "rgba(32,178,166,0.35)";
+                  e.currentTarget.style.boxShadow =
+                    "0 12px 40px rgba(32,178,166,0.10)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--color-border)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
               {/* Image */}
-              <div className="relative overflow-hidden aspect-video">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div
-                  className="absolute inset-0 
-                bg-linear-to-t from-card via-card/50
-                 to-transparent opacity-60"
-                />
-                {/* Overlay Links */}
-                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <a
-                    href={project.link}
-                    className="p-3 rounded-full glass hover:bg-primary hover:text-primary-foreground transition-all"
+              <div
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  aspectRatio: "16/9",
+                  background: project.comingSoon
+                    ? "linear-gradient(135deg, rgba(32,178,166,0.08) 0%, rgba(32,178,166,0.02) 100%)"
+                    : "#0a0e12",
+                }}
+              >
+                {project.image ? (
+                  <motion.img
+                    src={project.image}
+                    alt={project.title}
+                    whileHover={{ scale: 1.06, transition: { duration: 0.5 } }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
-                    <ArrowUpRight className="w-5 h-5" />
-                  </a>
-                  <a
-                    href={project.github}
-                    className="p-3 rounded-full glass hover:bg-primary hover:text-primary-foreground transition-all"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
-                </div>
+                    <span
+                      style={{
+                        fontFamily: "Space Grotesk, sans-serif",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        color: "var(--color-primary)",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      In Progress
+                    </span>
+                  </div>
+                )}
+
+                {/* Gradient overlay */}
+                {project.image && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background:
+                        "linear-gradient(to top, rgba(20,26,31,0.7) 0%, transparent 60%)",
+                    }}
+                  />
+                )}
               </div>
 
-              {/* Content */}
-              <div className="p-6 space-y-4">
-                <div className="flex items-start justify-between">
-                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+              {/* Body */}
+              <div
+                style={{
+                  padding: "22px 22px 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "14px",
+                  flex: 1,
+                }}
+              >
+                {/* Title */}
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: "Space Grotesk, sans-serif",
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      color: "var(--color-foreground)",
+                      letterSpacing: "-0.3px",
+                      marginBottom: "4px",
+                    }}
+                  >
                     {project.title}
                   </h3>
-                  <ArrowUpRight
-                    className="w-5 h-5 
-                  text-muted-foreground group-hover:text-primary
-                   group-hover:translate-x-1 
-                   group-hover:-translate-y-1 transition-all"
-                  />
+                  <p
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: "12px",
+                      color: "var(--color-primary)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {project.subtitle}
+                  </p>
                 </div>
-                <p className="text-muted-foreground text-sm">
+
+                {/* Description */}
+                <p
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: 1.7,
+                    color: "var(--color-muted-foreground)",
+                  }}
+                >
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, tagIdx) => (
+
+                {/* Tags */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {project.tags.map((tag) => (
                     <span
-                      key={tagIdx}
-                      className="px-4 py-1.5 rounded-full bg-surface text-xs font-medium border border-border/50 text-muted-foreground hover:border-primary/50 hover:text-primary transition-all duration-300"
+                      key={tag}
+                      style={{
+                        padding: "3px 10px",
+                        borderRadius: "999px",
+                        background: "rgba(32,178,166,0.07)",
+                        border: "1px solid rgba(32,178,166,0.18)",
+                        fontSize: "11px",
+                        fontWeight: 500,
+                        color: "var(--color-muted-foreground)",
+                        fontFamily: "Inter, sans-serif",
+                      }}
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
+
+                {/* Metrics */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                  }}
+                >
+                  {project.metrics.map((m) => (
+                    <div
+                      key={m}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "5px",
+                          height: "5px",
+                          borderRadius: "50%",
+                          backgroundColor: "var(--color-primary)",
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "12px",
+                          color: "var(--color-primary)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {m}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Buttons */}
+                {!project.comingSoon && (
+                  <div
+                    style={{ display: "flex", gap: "10px", marginTop: "4px" }}
+                  >
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                        padding: "9px 0",
+                        borderRadius: "10px",
+                        border: "1px solid var(--color-border)",
+                        background: "transparent",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        fontFamily: "Space Grotesk, sans-serif",
+                        color: "var(--color-foreground)",
+                        textDecoration: "none",
+                        transition: "border-color 0.2s, background 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(32,178,166,0.4)";
+                        e.currentTarget.style.background =
+                          "rgba(32,178,166,0.06)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "var(--color-border)";
+                        e.currentTarget.style.background = "transparent";
+                      }}
+                    >
+                      <Github size={14} /> Code
+                    </a>
+
+                    {project.demo && project.demo !== project.github ? (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          flex: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                          padding: "9px 0",
+                          borderRadius: "10px",
+                          background: "var(--color-primary)",
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          fontFamily: "Space Grotesk, sans-serif",
+                          color: "#ffffff",
+                          textDecoration: "none",
+                          boxShadow: "0 0 18px rgba(32,178,166,0.3)",
+                          transition: "box-shadow 0.2s",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.boxShadow =
+                            "0 0 28px rgba(32,178,166,0.55)")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.boxShadow =
+                            "0 0 18px rgba(32,178,166,0.3)")
+                        }
+                      >
+                        <ExternalLink size={14} /> Demo
+                      </a>
+                    ) : (
+                      <div
+                        style={{
+                          flex: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                          padding: "9px 0",
+                          borderRadius: "10px",
+                          background: "rgba(32,178,166,0.06)",
+                          border: "1px solid rgba(32,178,166,0.15)",
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          fontFamily: "Space Grotesk, sans-serif",
+                          color: "var(--color-muted-foreground)",
+                        }}
+                      >
+                        <ExternalLink size={14} /> No Demo
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* View All CTA */}
-
-        <div className="text-center mt-12 animate-fade-in animation-delay-500">
-          <a href="https://github.com/vishalvermacore">
-            <AnimatedBorderButton>
-              View All Projects
-              <ArrowUpRight className="w-5 h-5" />
-            </AnimatedBorderButton>
+        {/* View all CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          style={{ textAlign: "center", marginTop: "52px" }}
+        >
+          <a
+            href="https://github.com/vishalvermacore"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "12px 28px",
+              borderRadius: "999px",
+              border: "1px solid var(--color-border)",
+              background: "transparent",
+              fontSize: "14px",
+              fontWeight: 600,
+              fontFamily: "Space Grotesk, sans-serif",
+              color: "var(--color-foreground)",
+              textDecoration: "none",
+              transition: "border-color 0.2s, color 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "var(--color-primary)";
+              e.currentTarget.style.color = "var(--color-primary)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "var(--color-border)";
+              e.currentTarget.style.color = "var(--color-foreground)";
+            }}
+          >
+            View All on GitHub <ArrowUpRight size={16} />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

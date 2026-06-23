@@ -1,108 +1,331 @@
-import { Code2, Lightbulb, Rocket, Users } from "lucide-react";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Brain, Database, BarChart3, FlaskConical } from "lucide-react";
 
-const highlights = [
+const expertise = [
   {
-    icon: Code2,
-    title: "Clean Code",
+    icon: Brain,
+    title: "Machine Learning",
     description:
-      "Writing maintainable, scalable code that stands the test of time.",
+      "Building supervised & unsupervised models, deep learning architectures, and deploying ML pipelines at scale.",
   },
   {
-    icon: Rocket,
-    title: "Performance",
+    icon: Database,
+    title: "Data Engineering",
     description:
-      "Optimizing for speed and delivering lightning-fast user experiences.",
+      "Designing robust data pipelines, ETL workflows, and cloud infrastructure for production ML systems.",
   },
   {
-    icon: Users,
-    title: "Collaboration",
-    description: "Working closely with teams to bring ideas to life.",
+    icon: BarChart3,
+    title: "Analytics & Insights",
+    description:
+      "Transforming raw data into compelling visualizations and actionable business intelligence dashboards.",
   },
   {
-    icon: Lightbulb,
-    title: "Innovation",
+    icon: FlaskConical,
+    title: "Experimentation",
     description:
-      "Staying ahead with the latest technologies and best practices.",
+      "Running A/B tests, statistical hypothesis testing, and model evaluation to drive data-backed decisions.",
   },
 ];
 
+const skillTags = [
+  "Python",
+  "R",
+  "SQL",
+  "TensorFlow",
+  "PyTorch",
+  "Scikit-learn",
+  "Pandas",
+  "NumPy",
+  "AWS",
+  "Docker",
+];
+
+// Reusable animation variants
+const fadeLeft = {
+  hidden: { opacity: 0, x: -40, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+const fadeRight = {
+  hidden: { opacity: 0, x: 40, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+const staggerCards = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+const cardItem = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export const About = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
-    <section id="about" className="py-32 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column */}
-          <div className="space-y-8">
-            <div className="animate-fade-in">
-              <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase">
-                About Me
-              </span>
-            </div>
+    <section
+      id="about"
+      ref={ref}
+      style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}
+    >
+      {/* Subtle bg glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: "20%",
+          left: "-10%",
+          width: "500px",
+          height: "500px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(32,178,166,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight animate-fade-in animation-delay-100 text-secondary-foreground">
-              Building reliable web experiences,
-              <span className="font-serif italic font-normal text-white">
-                {" "}
-                one feature at a time.
-              </span>
-            </h2>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+        {/* Section label */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          style={{ textAlign: "center", marginBottom: "64px" }}
+        >
+          <span
+            style={{
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            About Me
+          </span>
+          <h2
+            style={{
+              fontFamily: "Space Grotesk, sans-serif",
+              fontSize: "clamp(30px, 4vw, 46px)",
+              fontWeight: 700,
+              letterSpacing: "-1.5px",
+              lineHeight: 1.15,
+              color: "var(--color-foreground)",
+              marginTop: "12px",
+            }}
+          >
+            Turning data into{" "}
+            <span
+              style={{
+                fontFamily: "Playfair Display, serif",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "var(--color-primary)",
+              }}
+            >
+              decisions.
+            </span>
+          </h2>
+        </motion.div>
 
-            <div className="space-y-4 text-muted-foreground animate-fade-in animation-delay-200">
-              <p>
-                I’m a full stack web developer who enjoys turning ideas into
-                practical, well-structured web applications. My interest in
-                development started with curiosity about how websites work
-                behind the scenes, and over time it grew into hands-on
-                experience building projects with modern web technologies.
-              </p>
-              <p>
-                I work primarily with JavaScript, React, Node.js, and databases
-                like MongoDB and MySQL, focusing on writing clean, readable code
-                that is easy to maintain and scale. I value simplicity,
-                performance, and usability, and I aim to build applications that
-                solve real problems rather than add unnecessary complexity.
-              </p>
-              <p>
-                I enjoy collaborating with others, learning from feedback, and
-                continuously improving my skills. Whether it’s refining a UI,
-                improving backend logic, or debugging an issue, I like
-                understanding why things work the way they do.
-              </p>
-              <p>
-                Outside of coding, you’ll find me learning emerging web
-                technologies, exploring modern design trends, and strengthening
-                core software fundamentals. In my free time, I enjoy playing
-                football, badminton, and cricket, which help me stay disciplined
-                and maintain a healthy, balanced routine.
-              </p>
-            </div>
-
-            <div className="glass rounded-2xl p-6 glow-border animate-fade-in animation-delay-300">
-              <p className="text-lg font-medium italic text-foreground">
-                "My goal is to build web applications that are clear,
-                dependable, and genuinely useful—for both users and developers."
-              </p>
-            </div>
-          </div>
-
-          {/* Right Column - Hilights */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            {highlights.map((item, idx) => (
-              <div
-                key={idx}
-                className="glass p-6 rounded-2xl animate-fade-in"
-                style={{ animationDelay: `${(idx + 1) * 100}ms` }}
+        {/* Two-column layout */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "64px",
+            alignItems: "start",
+          }}
+        >
+          {/* LEFT — bio */}
+          <motion.div
+            variants={fadeLeft}
+            initial="hidden"
+            animate={inView ? "show" : "hidden"}
+            style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            >
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "15px",
+                  lineHeight: 1.8,
+                  color: "var(--color-muted-foreground)",
+                }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 hover:bg-primary/20">
-                  <item.icon className="w-6 h-6 text-primary" />
+                I'm a Data Science & ML Engineer passionate about building
+                end-to-end intelligent systems that deliver measurable impact.
+                My journey started with curiosity about how data shapes
+                decisions, and grew into hands-on experience with machine
+                learning pipelines, statistical modelling, and data engineering.
+              </p>
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "15px",
+                  lineHeight: 1.8,
+                  color: "var(--color-muted-foreground)",
+                }}
+              >
+                I enjoy the full lifecycle — from raw data wrangling and feature
+                engineering to model training, evaluation, and deploying APIs
+                that serve predictions in production. I value clean,
+                reproducible code and results that actually move the needle.
+              </p>
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "15px",
+                  lineHeight: 1.8,
+                  color: "var(--color-muted-foreground)",
+                }}
+              >
+                Outside work, you'll find me exploring new ML research,
+                contributing to open-source, or on a football pitch — staying
+                sharp in both mind and body.
+              </p>
+            </div>
+
+            {/* Quote card */}
+            <div
+              style={{
+                padding: "20px 24px",
+                borderRadius: "16px",
+                background: "rgba(32,178,166,0.06)",
+                border: "1px solid rgba(32,178,166,0.2)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "Playfair Display, serif",
+                  fontStyle: "italic",
+                  fontSize: "16px",
+                  lineHeight: 1.65,
+                  color: "var(--color-foreground)",
+                }}
+              >
+                "My goal is to build data systems that are accurate,
+                explainable, and genuinely useful — for both engineers and
+                stakeholders."
+              </p>
+            </div>
+
+            {/* Skill tags */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+              {skillTags.map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    padding: "5px 14px",
+                    borderRadius: "999px",
+                    background: "rgba(32,178,166,0.08)",
+                    border: "1px solid rgba(32,178,166,0.2)",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "var(--color-primary)",
+                    fontFamily: "Space Grotesk, sans-serif",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* RIGHT — expertise cards */}
+          <motion.div
+            variants={staggerCards}
+            initial="hidden"
+            animate={inView ? "show" : "hidden"}
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            {expertise.map(({ icon: Icon, title, description }) => (
+              <motion.div
+                key={title}
+                variants={cardItem}
+                whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "16px",
+                  padding: "20px 22px",
+                  borderRadius: "16px",
+                  background: "var(--color-card, #141a1f)",
+                  border: "1px solid var(--color-border)",
+                  cursor: "default",
+                  transition: "border-color 0.2s, box-shadow 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(32,178,166,0.35)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 24px rgba(32,178,166,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--color-border)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                {/* Icon */}
+                <div
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "rgba(32,178,166,0.1)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon size={20} color="var(--color-primary)" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {item.description}
-                </p>
-              </div>
+
+                {/* Text */}
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: "Space Grotesk, sans-serif",
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      color: "var(--color-foreground)",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: "13px",
+                      lineHeight: 1.65,
+                      color: "var(--color-muted-foreground)",
+                    }}
+                  >
+                    {description}
+                  </p>
+                </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

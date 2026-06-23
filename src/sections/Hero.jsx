@@ -1,35 +1,43 @@
-import { Button } from "@/components/Button";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
-  ChevronDown,
   Github,
   Linkedin,
   Download,
+  ChevronDown,
 } from "lucide-react";
-import { AnimatedBorderButton } from "../components/AnimatedBorderButton";
 
-const skills = [
-  "Java",
-  "JavaScript",
-  "C",
-  "HTML5",
-  "CSS3",
-  "React.js",
-  "Bootstrap",
-  "Tailwind CSS",
-  "Node.js",
-  "Express.js",
-  "MongoDB",
-  "MySQL",
-  "Git",
-  "GitHub",
-  "Visual Studio Code",
-  "Problem Solving",
-  "Communication",
-  "Collaboration",
+const ROLES = [
+  "Data Scientist",
+  "ML Engineer",
+  "AI Developer",
+  "Problem Solver",
 ];
 
-// Fixed dot positions — computed once, not on every render
+const DS_SKILLS = [
+  "Python",
+  "R",
+  "TensorFlow",
+  "PyTorch",
+  "Scikit-learn",
+  "Pandas",
+  "NumPy",
+  "SQL",
+  "Apache Spark",
+  "Kafka",
+  "AWS",
+  "Docker",
+  "Jupyter",
+  "FastAPI",
+  "React.js",
+  "MongoDB",
+  "Tableau",
+  "Power BI",
+  "Git",
+  "LangChain",
+];
+
 const DOTS = [
   { left: "5%", top: "12%", dur: 18, delay: 0 },
   { left: "12%", top: "45%", dur: 22, delay: 1.2 },
@@ -63,28 +71,108 @@ const DOTS = [
   { left: "3%", top: "95%", dur: 26, delay: 1.6 },
 ];
 
+const STATS = [
+  { value: "5+", label: "Projects Built" },
+  { value: "15+", label: "Technologies" },
+  { value: "2+", label: "Years Learning" },
+];
+
+// framer-motion variants
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13 } },
+};
+const item = {
+  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export const Hero = () => {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Typewriter effect
+  useEffect(() => {
+    const current = ROLES[roleIndex];
+    let t;
+    if (!isDeleting && displayed.length < current.length) {
+      t = setTimeout(
+        () => setDisplayed(current.slice(0, displayed.length + 1)),
+        80,
+      );
+    } else if (!isDeleting && displayed.length === current.length) {
+      t = setTimeout(() => setIsDeleting(true), 2200);
+    } else if (isDeleting && displayed.length > 0) {
+      t = setTimeout(
+        () => setDisplayed(current.slice(0, displayed.length - 1)),
+        45,
+      );
+    } else {
+      setIsDeleting(false);
+      setRoleIndex((p) => (p + 1) % ROLES.length);
+    }
+    return () => clearTimeout(t);
+  }, [displayed, isDeleting, roleIndex]);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Bg */}
-      <div className="absolute inset-0">
+    <section
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      {/* Background image */}
+      <div style={{ position: "absolute", inset: 0 }}>
         <img
           src="/hero-bg.jpg"
-          alt="Hero image"
-          className="w-full h-full object-cover opacity-40"
+          alt=""
+          aria-hidden="true"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: 0.25,
+          }}
         />
-        <div className="absolute inset-0 bg-linear-to-b from-background/20 via-background/80 to-background" />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to bottom, color-mix(in srgb, var(--color-background) 30%, transparent), color-mix(in srgb, var(--color-background) 80%, transparent), var(--color-background))",
+          }}
+        />
       </div>
 
-      {/* Green Dots */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating dots */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
         {DOTS.map((dot, i) => (
           <div
             key={i}
             aria-hidden="true"
-            className="absolute w-1.5 h-1.5 rounded-full opacity-60"
             style={{
+              position: "absolute",
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
               backgroundColor: "#20B2A6",
+              opacity: 0.45,
               left: dot.left,
               top: dot.top,
               animation: `slow-drift ${dot.dur}s ease-in-out infinite`,
@@ -94,136 +182,345 @@ export const Hero = () => {
         ))}
       </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-6 pt-32 pb-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Text Content */}
-          <div className="space-y-8">
-            <div className="animate-fade-in">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Full Stack Web Developer
-              </span>
-            </div>
-
-            {/* Headline */}
-            <div className="space-y-4">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight animate-fade-in animation-delay-100">
-                Building{" "}
-                <span className="text-primary glow-text">full-stack</span> web
-                applications with{" "}
-                <span className="font-serif italic font-normal text-white">
-                  precision.
-                </span>
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
-                Hi, I’m Vishal Verma — a full stack web developer specializing
-                in JavaScript. I build responsive, reliable web applications
-                using modern technologies like React, Node.js, and MongoDB,
-                focusing on clean architecture, performance, and user-centric
-                design.
-              </p>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <a href="#contact">
-                <Button size="lg">
-                  Contact Me <ArrowRight className="w-5 h-5" />
-                </Button>
-              </a>
-              <a
-                href="/resume/VishalVermaResume.pdf"
-                download="VishalVermaResume.pdf"
-                className="inline-block"
-              >
-                <AnimatedBorderButton>
-                  <Download className="w-5 h-5" />
-                  Download CV
-                </AnimatedBorderButton>
-              </a>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
-              <span className="text-sm text-muted-foreground">
-                Connect with me:{" "}
-              </span>
-              {[
-                { icon: Github, href: "https://github.com/vishalvermacore" },
-                {
-                  icon: Linkedin,
-                  href: "https://www.linkedin.com/in/vishalvermacore",
-                },
-              ].map((social, idx) => (
-                <a
-                  key={idx}
-                  href={social.href}
-                  className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
-                >
-                  {<social.icon className="w-5 h-5" />}
-                </a>
-              ))}
-            </div>
-          </div>
-          {/* Right Column - Profile Image */}
-          <div className="relative animate-fade-in animation-delay-300">
-            {/* Profile Image */}
-            <div className="relative max-w-md mx-auto">
-              <div
-                className="absolute inset-0 
-              rounded-3xl bg-linear-to-br 
-              from-primary/30 via-transparent 
-              to-primary/10 blur-2xl animate-pulse"
+      {/* Centered content */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "760px",
+          margin: "0 auto",
+          padding: "120px 24px 80px",
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: "24px",
+          }}
+        >
+          {/* Badge */}
+          <motion.div variants={item}>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "6px 18px",
+                borderRadius: "999px",
+                background: "rgba(32,178,166,0.1)",
+                border: "1px solid rgba(32,178,166,0.3)",
+                fontSize: "13px",
+                fontWeight: 500,
+                color: "var(--color-primary)",
+                fontFamily: "Space Grotesk, sans-serif",
+                letterSpacing: "0.01em",
+              }}
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--color-primary)",
+                  display: "inline-block",
+                  animation: "pulse 2s infinite",
+                }}
               />
-              <div className="relative glass rounded-3xl p-2 glow-border">
-                <img
-                  src="/profile-photo.jpg"
-                  alt="Vishal Verma"
-                  className="w-full aspect-4/5 object-cover rounded-2xl"
-                />
+              Available for Opportunities
+            </span>
+          </motion.div>
 
-                {/* Floating Badge */}
-                <div className="absolute -bottom-4 -right-4 glass rounded-xl px-4 py-3 animate-float">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm font-medium">
-                      Available for work
-                    </span>
-                  </div>
+          {/* Main headline */}
+          <motion.h1
+            variants={item}
+            style={{
+              fontFamily: "Space Grotesk, sans-serif",
+              fontSize: "clamp(38px, 6vw, 70px)",
+              fontWeight: 700,
+              letterSpacing: "-2.5px",
+              lineHeight: 1.08,
+              color: "var(--color-foreground)",
+              margin: 0,
+            }}
+          >
+            Hi, I'm{" "}
+            <span
+              style={{
+                color: "var(--color-primary)",
+                textShadow: "0 0 40px rgba(32,178,166,0.35)",
+              }}
+            >
+              Vishal Verma
+            </span>
+          </motion.h1>
+
+          {/* Typewriter line */}
+          <motion.div
+            variants={item}
+            style={{
+              height: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "Space Grotesk, sans-serif",
+                fontSize: "clamp(18px, 2.8vw, 28px)",
+                fontWeight: 500,
+                color: "var(--color-primary)",
+                letterSpacing: "-0.3px",
+              }}
+            >
+              {displayed}
+              <span className="cursor-blink">|</span>
+            </span>
+          </motion.div>
+
+          {/* Subtitle */}
+          <motion.p
+            variants={item}
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "16px",
+              lineHeight: 1.75,
+              color: "var(--color-muted-foreground)",
+              maxWidth: "540px",
+              margin: 0,
+            }}
+          >
+            I transform complex data into actionable insights using machine
+            learning, statistical analysis, and data visualization to drive real
+            business decisions.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            variants={item}
+            style={{
+              display: "flex",
+              gap: "12px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <motion.a
+              href="#projects"
+              whileHover={{
+                scale: 1.04,
+                boxShadow: "0 0 38px rgba(32,178,166,0.6)",
+              }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "13px 30px",
+                borderRadius: "999px",
+                background: "var(--color-primary)",
+                color: "#ffffff",
+                fontSize: "15px",
+                fontWeight: 600,
+                fontFamily: "Space Grotesk, sans-serif",
+                textDecoration: "none",
+                boxShadow: "0 0 24px rgba(32,178,166,0.38)",
+                transition: "box-shadow 0.2s",
+              }}
+            >
+              View My Work <ArrowRight size={16} />
+            </motion.a>
+            <motion.a
+              href="/resume/VishalVermaResume.pdf"
+              download="VishalVermaResume.pdf"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "13px 30px",
+                borderRadius: "999px",
+                background: "transparent",
+                color: "var(--color-foreground)",
+                fontSize: "15px",
+                fontWeight: 600,
+                fontFamily: "Space Grotesk, sans-serif",
+                textDecoration: "none",
+                border: "1px solid var(--color-border)",
+                transition: "border-color 0.2s",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.borderColor = "var(--color-primary)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.borderColor = "var(--color-border)")
+              }
+            >
+              <Download size={16} /> Download CV
+            </motion.a>
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div
+            variants={item}
+            style={{ display: "flex", alignItems: "center", gap: "10px" }}
+          >
+            {[
+              {
+                Icon: Github,
+                href: "https://github.com/vishalvermacore",
+                label: "GitHub",
+              },
+              {
+                Icon: Linkedin,
+                href: "https://www.linkedin.com/in/vishalvermacore",
+                label: "LinkedIn",
+              },
+            ].map(({ Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  border: "1px solid var(--color-border)",
+                  background: "rgba(255,255,255,0.03)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--color-muted-foreground)",
+                  textDecoration: "none",
+                  transition: "border-color 0.2s, color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--color-primary)";
+                  e.currentTarget.style.color = "var(--color-primary)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--color-border)";
+                  e.currentTarget.style.color = "var(--color-muted-foreground)";
+                }}
+              >
+                <Icon size={17} />
+              </a>
+            ))}
+          </motion.div>
+
+          {/* Stats bar */}
+          <motion.div
+            variants={item}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1px",
+              background: "var(--color-border)",
+              borderRadius: "16px",
+              overflow: "hidden",
+              border: "1px solid var(--color-border)",
+              width: "100%",
+              maxWidth: "400px",
+            }}
+          >
+            {STATS.map((stat) => (
+              <div
+                key={stat.label}
+                style={{
+                  background: "var(--color-card, #141a1f)",
+                  padding: "18px 12px",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "Space Grotesk, sans-serif",
+                    fontSize: "26px",
+                    fontWeight: 700,
+                    color: "var(--color-primary)",
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  {stat.value}
                 </div>
-                {/* Stats Badge */}
-                <div className="absolute -top-4 -left-4 glass rounded-xl px-4 py-3 animate-float animation-delay-500">
-                  <div className="text-2xl font-bold text-primary">
-                    Hands On
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Experience
-                  </div>
+                <div
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "11px",
+                    color: "var(--color-muted-foreground)",
+                    marginTop: "3px",
+                  }}
+                >
+                  {stat.label}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            ))}
+          </motion.div>
+        </motion.div>
 
-        {/* Skills Section */}
-        <div className="mt-20 animate-fade-in animation-delay-600">
-          <p className="text-sm text-muted-foreground mb-6 text-center">
-            Technologies I work with
+        {/* Skills marquee */}
+        <div style={{ marginTop: "60px" }}>
+          <p
+            style={{
+              fontSize: "11px",
+              textTransform: "uppercase",
+              letterSpacing: "0.12em",
+              color: "var(--color-muted-foreground)",
+              textAlign: "center",
+              marginBottom: "20px",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            Technologies &amp; Tools
           </p>
-          <div className="relative overflow-hidden">
+          <div style={{ position: "relative", overflow: "hidden" }}>
             <div
-              className="absolute left-0 top-0 bottom-0 w-32
-             bg-linear-to-r from-background to-transparent z-10"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: "80px",
+                background:
+                  "linear-gradient(to right, var(--color-background), transparent)",
+                zIndex: 10,
+              }}
             />
             <div
-              className="absolute right-0 top-0 bottom-0 w-32
-             bg-linear-to-l from-background to-transparent z-10"
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: "80px",
+                background:
+                  "linear-gradient(to left, var(--color-background), transparent)",
+                zIndex: 10,
+              }}
             />
-            <div className="flex animate-marquee">
-              {[...skills, ...skills].map((skill, idx) => (
-                <div key={idx} className="shrink-0 px-8 py-4">
-                  <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+            <div className="animate-marquee" style={{ display: "flex" }}>
+              {[...DS_SKILLS, ...DS_SKILLS].map((skill, i) => (
+                <div key={i} style={{ flexShrink: 0, padding: "8px 28px" }}>
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 600,
+                      color: "var(--color-muted-foreground)",
+                      opacity: 0.45,
+                      fontFamily: "Space Grotesk, sans-serif",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {skill}
                   </span>
                 </div>
@@ -233,16 +530,48 @@ export const Hero = () => {
         </div>
       </div>
 
+      {/* Scroll indicator */}
+
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 
-      animate-fade-in animation-delay-800"
+        style={{
+          position: "absolute",
+          bottom: "28px",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
       >
         <a
           href="#about"
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "6px",
+            color: "var(--color-muted-foreground)",
+            textDecoration: "none",
+            transition: "color 0.2s",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.color = "var(--color-primary)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.color = "var(--color-muted-foreground)")
+          }
         >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <ChevronDown className="w-6 h-6 animate-bounce" />
+          <span
+            style={{
+              fontSize: "10px",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            Scroll
+          </span>
+          <ChevronDown
+            size={18}
+            style={{ animation: "hero-bounce 1.6s ease-in-out infinite" }}
+          />
         </a>
       </div>
     </section>
