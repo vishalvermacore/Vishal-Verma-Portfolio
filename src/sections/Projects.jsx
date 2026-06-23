@@ -4,27 +4,27 @@ import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
 
 const projects = [
   {
-    title: "EchoStream",
-    subtitle: "Real-Time Video Calling & Chat Platform",
+    title: "UPIShield",
+    subtitle: "UPI Fraud Detection & Risk Intelligence",
     description:
-      "A global language exchange platform using the MERN stack with WebRTC for peer-to-peer video calling, Socket.io for real-time messaging, and Stream API for scalable chat infrastructure.",
+      "End-to-end UPI fraud detection pipeline in Python & MySQL — EDA, feature engineering, SMOTE-balanced XGBoost/Random Forest models, SHAP explainability, and statistical validation on 250K transactions.",
     image: "/projects/project1.png",
-    tags: ["React", "Node.js", "Socket.io", "WebRTC", "MongoDB", "ExpressJS"],
-    metrics: ["Real-time < 200ms", "Multi-room Support", "Live Chat"],
-    demo: "https://echostream-video-calling-realtime-chat.onrender.com",
+    tags: ["Python", "MySQL", "XGBoost", "Random Forest", "SHAP", "EDA"],
+    metrics: ["250K Transactions", "Fraud Detection", "Risk Intelligence"],
+    demo: "https://github.com/vishalvermacore/",
     github:
-      "https://github.com/vishalvermacore/EchoStream-Video-Calling-Realtime-Chat-Social-App",
+      "https://github.com/vishalvermacore/UPISHIELD-UPI-Fraud-Detection-Project",
   },
   {
-    title: "Tredzo",
-    subtitle: "Zerodha-Style Stock Trading Application",
+    title: "LoanSense",
+    subtitle: "Intelligent Loan Approval System",
     description:
-      "A full-stack stock trading web app inspired by Zerodha. Features interactive watchlists, order execution simulation, portfolio analytics with Chart.js, and a realistic trading dashboard.",
-    image: "/projects/project2.jpeg",
-    tags: ["React.js", "Node.js", "MongoDB", "Chart.js", "Material UI", "Jest"],
-    metrics: ["Portfolio Analytics", "Order Execution", "Interactive Charts"],
-    demo: null,
-    github: "https://github.com/vishalvermacore/Stock-Trade-Application",
+      "AI-powered loan approval prediction system using XGBoost with 96.3% accuracy. Predicts credit eligibility based on income, credit score, DTI ratio & 20+ financial features. Built with Python, Scikit-learn & Streamlit",
+    image: "/projects/project2.png",
+    tags: ["Python", "XGBoost", "Scikit-learn", "Streamlit"],
+    metrics: ["Predictive Modeling", "Fraud Prevention", "Risk Scoring"],
+    demo: "https://credit-loan-prediction.streamlit.app/",
+    github: "https://github.com/vishalvermacore/LoanSense",
   },
   {
     title: "Coming Soon",
