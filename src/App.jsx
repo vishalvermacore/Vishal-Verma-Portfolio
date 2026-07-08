@@ -11,18 +11,16 @@ import { ThemeProvider } from "@/context/ThemeContext";
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen overflow-x-hidden">
-        <Navbar />
-        <main>
-          <Hero />
-          <About />
-          <Skills />
-          <Projects />
-          <Education />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Projects />
+        <Education />
+        <Contact />
+      </main>
+      <Footer />
     </ThemeProvider>
   );
 }

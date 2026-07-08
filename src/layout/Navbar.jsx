@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Education", href: "#educations" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "about" },
+  { label: "Skills", href: "skills" },
+  { label: "Projects", href: "projects" },
+  { label: "Education", href: "educations" },
+  { label: "Contact", href: "contact" },
 ];
 
 export function Navbar() {
@@ -21,6 +21,17 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const scrollToSection = (id) => {
+    // Close menu first, then scroll after animation finishes
+    setMenuOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: "smooth" });
+    }, 300);
+  };
 
   return (
     <header
@@ -46,6 +57,10 @@ export function Navbar() {
         {/* ── Logo ── */}
         <motion.a
           href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -66,13 +81,17 @@ export function Navbar() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          style={{ alignItems: "center", gap: "32px" }}
           className="hidden lg:flex"
+          style={{ alignItems: "center", gap: "32px" }}
         >
           {navLinks.map((link) => (
             <a
               key={link.label}
-              href={link.href}
+              href={`#${link.href}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(link.href);
+              }}
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "14px",
@@ -101,7 +120,6 @@ export function Navbar() {
           className="hidden lg:flex"
           style={{ alignItems: "center", gap: "12px" }}
         >
-          {/* Sun / Moon toggle */}
           <button
             onClick={toggleTheme}
             aria-label="Toggle light/dark mode"
@@ -146,9 +164,12 @@ export function Navbar() {
             </AnimatePresence>
           </button>
 
-          {/* Hire Me */}
           <motion.a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("contact");
+            }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.96 }}
             style={{
@@ -177,7 +198,7 @@ export function Navbar() {
         </motion.div>
 
         {/* ── Mobile: toggle + hamburger ── */}
-        <div className="lg:hidden" style={{ display: "flex", gap: "8px" }}>
+        <div className="lg:hidden flex" style={{ gap: "8px" }}>
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -237,47 +258,58 @@ export function Navbar() {
                 padding: "16px 24px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "16px",
+                gap: "4px",
               }}
             >
-              {navLinks.map((link, i) => (
-                <motion.a
+              {navLinks.map((link) => (
+                <button
                   key={link.label}
-                  href={link.href}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06 }}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => scrollToSection(link.href)}
                   style={{
                     fontFamily: "Inter, sans-serif",
                     fontSize: "15px",
                     fontWeight: 500,
                     color: "var(--color-foreground)",
                     textDecoration: "none",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    padding: "12px 0",
+                    borderBottom: "1px solid var(--color-border)",
+                    width: "100%",
+                    transition: "color 0.2s",
                   }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "var(--color-primary)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "var(--color-foreground)")
+                  }
                 >
                   {link.label}
-                </motion.a>
+                </button>
               ))}
 
-              <motion.a
-                href="#contact"
-                onClick={() => setMenuOpen(false)}
+              <button
+                onClick={() => scrollToSection("contact")}
                 style={{
-                  padding: "10px 0",
+                  marginTop: "12px",
+                  padding: "12px 0",
                   borderRadius: "999px",
                   background: "var(--color-primary)",
                   color: "#ffffff",
                   fontSize: "14px",
                   fontWeight: 600,
                   fontFamily: "Space Grotesk, sans-serif",
-                  textDecoration: "none",
-                  textAlign: "center",
-                  marginTop: "4px",
+                  border: "none",
+                  cursor: "pointer",
+                  width: "100%",
+                  boxShadow: "0 0 18px rgba(32,178,166,0.35)",
                 }}
               >
                 Hire Me
-              </motion.a>
+              </button>
             </div>
           </motion.div>
         )}
